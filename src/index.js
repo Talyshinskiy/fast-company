@@ -1,21 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import Users from './componets/users';
-import "bootstrap/dist/css/bootstrap.css"
-// import Loader from './componets/Loader/Loader';
-// import Table from './componets/Table/Table'
-// import Table from './componets/Table/table';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import reportWebVitals from "./reportWebVitals";
+import "bootstrap/dist/css/bootstrap.css";
+import App from "./App";
 
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-
-  <div className='container'>
-    <Users />
-  </div>
-
-
-
+ReactDOM.render(
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>,
+    document.getElementById("root")
 );
 
-
+reportWebVitals();
