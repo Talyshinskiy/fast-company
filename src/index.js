@@ -3,12 +3,16 @@ import ReactDOM from "react-dom";
 import "./index.css";
 // import reportWebVitals from "./reportWebVitals";
 import "bootstrap/dist/css/bootstrap.css";
+import { BrowserRouter } from "react-router-dom";
+
 import App from "./App";
 
 ReactDOM.render(
-    <React.StrictMode>
-        <App />
-    </React.StrictMode>,
+    <BrowserRouter>
+        <React.StrictMode>
+            <App />
+        </React.StrictMode>
+    </BrowserRouter>,
     document.getElementById("root")
 );
 

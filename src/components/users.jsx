@@ -21,6 +21,10 @@ const Users = () => {
         api.users.fetchAll().then((data) => setUsers(data));
     }, []);
 
+    // useEffect(() => {
+    //     api.users.getById().then((id) => setUsers(id));
+    // }, []);
+
     const handleDelete = (userId) => {
         setUsers(users.filter((user) => user._id !== userId));
     };
@@ -103,6 +107,7 @@ const Users = () => {
                             selectedSort={sortBy}
                             onDelete={handleDelete}
                             onToggleBookMark={handleToggleBookMark}
+                            // getById={getById}
                         />
                     )}
                     <div className="d-flex justify-content-center">
