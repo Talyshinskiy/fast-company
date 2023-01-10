@@ -1,38 +1,40 @@
-import React from "react";
-// import { Link } from "react-router-dom";
-import { useHistory } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useHistory, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
-// import api from "../api";
+import { getById } from "../api/fake.api/user.api";
 
-// import TableBody from "./tableBody";
-// import TableHeader from "./tableHeader";
+const UserPage = () => {
+    const [user, setUser] = useState();
+    const params = useParams();
+    const { userId } = params;
 
-const UserPage = ({ user }) => {
-    // const [user, setUser] = useState();
-
-    // useEffect(() => {
-    //     api.users.fetchAll().then((data) => getById(data));
-    // }, []);
+    useEffect(() => {
+        getById(userId).then((user) => setUser(user));
+    }, []);
 
     const history = useHistory();
 
+    console.log("user", user);
+
     const handleBack = () => {
-        console.log(1);
         history.replace("/users");
     };
-    return (
-        <div>
-            <h1>123</h1>
+    if (user) {
+        return (
+            <div>
+                <h2>{user.name}</h2>
+                <h2>Профессия: {user.profession.name}</h2>
+                <h2>Оценка: {user.rate}</h2>
 
-            {/* <h1>{user._id}</h1>
-            <h1>{user.name}</h1>
-            <h2>{user.profession}</h2>
-            <h2>{user.qualities}</h2>
-            <h2>{user.completedMeetings}</h2>
-            <h2>{user.rate}</h2> */}
-            <button onClick={() => handleBack()}>All users !</button>
-        </div>
-    );
+                <h2>Встретился, раз: {user.completedMeetings}</h2>
+                <span className={"badge m-1 bg-" + user.qualities[0].color}>
+                    {user.qualities[0].name}
+                </span>
+                <button onClick={() => handleBack()}>All users !</button>
+            </div>
+        );
+    }
+    return "loading....";
 };
 
 UserPage.propTypes = {
