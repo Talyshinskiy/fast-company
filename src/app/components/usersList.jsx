@@ -7,42 +7,36 @@ import GroupList from "./groupList";
 import SearchStatus from "./searchStatus";
 import UserTable from "./usersTable";
 import _ from "lodash";
-
-const Users = () => {
+import TextField from "./textField";
+const UsersList = () => {
     const [currentPage, setCurrentPage] = useState(1);
-    const [professions, setProfessions] = useState();
+    const [professions, setProfession] = useState();
     const [selectedProf, setSelectedProf] = useState();
     const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
+    const [searchUser, setSearchUser] = useState("");
 
     const pageSize = 8;
+
     const [users, setUsers] = useState();
 
     useEffect(() => {
         api.users.fetchAll().then((data) => setUsers(data));
     }, []);
-
-    // useEffect(() => {
-    //     api.users.getById().then((id) => setUsers(id));
-    // }, []);
-
     const handleDelete = (userId) => {
         setUsers(users.filter((user) => user._id !== userId));
     };
-
     const handleToggleBookMark = (id) => {
-        setUsers(
-            users.map((user) => {
-                if (user._id === id) {
-                    return { ...user, bookmark: !user.bookmark };
-                }
-                return user;
-            })
-        );
-        console.log(id);
+        const newArray = users.map((user) => {
+            if (user._id === id) {
+                return { ...user, bookmark: !user.bookmark };
+            }
+            return user;
+        });
+        setUsers(newArray);
     };
 
     useEffect(() => {
-        api.professions.fetchAll().then((data) => setProfessions(data));
+        api.professions.fetchAll().then((data) => setProfession(data));
     }, []);
 
     useEffect(() => {
@@ -50,25 +44,34 @@ const Users = () => {
     }, [selectedProf]);
 
     const handleProfessionSelect = (item) => {
+        // if (searchUser !== "") searchUser("");
         setSelectedProf(item);
+    };
+
+    const handleSearch = ({ target }) => {
+        // console.log("before", selectedProf);
+        setSelectedProf(undefined);
+        // console.log("after", selectedProf);
+        setSearchUser(target.value);
     };
 
     const handlePageChange = (pageIndex) => {
         setCurrentPage(pageIndex);
     };
-
     const handleSort = (item) => {
         setSortBy(item);
     };
 
     if (users) {
-        const filteredUsers = selectedProf
-            ? users.filter((user) =>
-                JSON.stringify(
-                    user.profession === JSON.stringify(selectedProf)
-                )
+        const filteredUsers = searchUser
+            ? users.filter(
+                (user) =>
+                    user.name
+                        .toLowerCase()
+                        .indexOf(searchUser.toLowerCase()) !== -1
             )
-            : users;
+            : selectedProf ? users.filter((user) => JSON.stringify(user.profession) === JSON.stringify(selectedProf)) : users;
+        // console.log(filteredUsers);
 
         const count = filteredUsers.length;
         const sortedUsers = _.orderBy(
@@ -80,7 +83,6 @@ const Users = () => {
         const clearFilter = () => {
             setSelectedProf();
         };
-
         return (
             <div className="d-flex">
                 {professions && (
@@ -94,12 +96,20 @@ const Users = () => {
                             className="btn btn-secondary mt-2"
                             onClick={clearFilter}
                         >
-                            Clear list
+                            {" "}
+                            Очиститть
                         </button>
                     </div>
                 )}
                 <div className="d-flex flex-column">
                     <SearchStatus length={count} />
+                    <TextField
+                        label=""
+                        name="search"
+                        value={searchUser}
+                        placeholder="Search........"
+                        onChange={handleSearch}
+                    />
                     {count > 0 && (
                         <UserTable
                             users={usersCrop}
@@ -107,7 +117,6 @@ const Users = () => {
                             selectedSort={sortBy}
                             onDelete={handleDelete}
                             onToggleBookMark={handleToggleBookMark}
-                            // getById={getById}
                         />
                     )}
                     <div className="d-flex justify-content-center">
@@ -122,11 +131,10 @@ const Users = () => {
             </div>
         );
     }
-    return "loading....";
+    return "loading...";
 };
-
-Users.propTypes = {
+UsersList.propTypes = {
     users: PropTypes.array
 };
 
-export default Users;
+export default UsersList;

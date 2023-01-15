@@ -144,14 +144,14 @@ const users = [
     }
 ];
 
-export const fetchAll = () =>
+const fetchAll = () =>
     new Promise((resolve) => {
         window.setTimeout(function() {
             resolve(users);
         }, 2000);
     });
 
-export const getById = (id) =>
+const getById = (id) =>
     new Promise((resolve) => {
         window.setTimeout(function() {
             resolve(users.find((user) => user._id === id));
