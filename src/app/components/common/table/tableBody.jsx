@@ -13,12 +13,6 @@ const TableBody = ({ data, columns }) => {
         }
         return _.get(item, columns[column].path);
     };
-
-    // const replaceToUserPage = (item) => {
-    //     console.log(item);
-    //     history.replace(`/users/${item._id}`);
-    // };
-
     return (
         <tbody>
             {data.map((item) => (
