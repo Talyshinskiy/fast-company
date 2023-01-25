@@ -10,15 +10,19 @@ const Users = () => {
     const { edit } = params;
     // console.log("edit", edit);
 
-    if (userId && edit) {
-        return (
-            <>
-                <EditUserPage userId={userId} />
-            </>
-        );
-    }
-
-    return <>{userId ? <UserPage userId={userId} /> : <UsersListPage />}</>;
+    return (
+        <>
+            {userId ? (
+                edit ? (
+                    <EditUserPage />
+                ) : (
+                    <UserPage userId={userId} />
+                )
+            ) : (
+                <UsersListPage />
+            )}
+        </>
+    );
 };
 
 export default Users;
